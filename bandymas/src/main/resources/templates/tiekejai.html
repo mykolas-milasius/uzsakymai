@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tiekėjai</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<style>
+		table, tr, td { border: 1px solid black; }
+	    label, input { display:block; }
+	    input.text { margin-bottom:12px; width:95%; padding: .4em; }
+	    fieldset { padding:0; border:0; margin-top:25px; }
+	    h1 { font-size: 1.2em; margin: .6em 0; }
+	    div#users-contain { width: 350px; margin: 20px 0; }
+	    div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+	    div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+	    .ui-dialog .ui-state-error { padding: .3em; }
+	    .validateTips { border: 1px solid transparent; padding: 0.3em; }
+	  </style>
+	  <link rel="stylesheet" href="main.css">	
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  	<script>
+  		/*
+  		function addSalis() {
+  		
+  			alert( "tuoj pridesim" );
+  			$( '#miesto-forma' ).submit();	
+  		}
+  	
+  		$( document ).ready ( function() {
+  		
+		    dialog = $( "#dialog-form" ).dialog({
+		      autoOpen: false,
+		      height: 400,
+		      width: 350,
+		      modal: true,
+		      buttons: {
+		        "Saugoti": addMiestas,
+		        Cancel: function() {
+		          dialog.dialog( "close" );
+		        }
+		      },
+		      close: function() {
+		       //  form[ 0 ].reset();
+		        // allFields.removeClass( "ui-state-error" );
+		      }
+		    }); 
+		    
+		    $( "#new_miestas" ).button().on ( "click", function() {
+		    
+		      alert ( 'atidarom dialoga' );
+		      dialog.dialog( "open" );
+		    });
+		    	
+		    $( ".edit" ).each ( function() {
+		    
+		    	$( this ).click ( function() {
+		    	
+		    		id_miesto = $( this ).data ( 'el_id' );
+		    		
+					$.ajax({
+						 method: 'POST'
+				 		 , url: '/miestas'
+				 		 , data: {
+				 		 	id: id_miesto
+				 		 }
+					}).done( function( data ) {
+						
+						// alert ( "gauti duomenys: " + data );
+						if ( data != null ) {
+						
+							$( '#pav' ).val ( data.pavadinimas );
+							$( '#salies_kodas' ).val ( data.salies_kodas );
+							$( '#ikurimo_data' ).val ( data.ikurimo_data );
+							$( '#gyventojai' ).val ( data.gyventojai );
+							$( '#plotas' ).val ( data.plotas );					
+							$( '#id').val ( data.id );
+		      				dialog.dialog( "open" );							
+						}
+						console.log ( JSON.stringify ( data ) );
+				  	});			    		
+		    		
+		    	});	
+		    			    
+		    });
+		  }); 
+		 */
+  	</script>	
+</head>
+<body>
+	<h3>Tiekėjai</h3>
+	<div id="page">
+		<nav>
+			<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+		</nav>
+	</div>
+	<!--<input type="button" id="salis" value="Naujas tiekėjas">
+	<div id="dialog-form" title="Tiekėjas">
+  		<p class="validateTips">All form fields are required.</p>	
+		<form id="miesto-forma" method="POST" action="">
+			  <fieldset>
+				<label for="pav">Šalis</label>
+				<input type="text" id="pav" name="pav" value="" class="text ui-widget-content ui-corner-all">
+				<label for="salies_kodas">Šalies kodas</label>		
+				<input type="text" id="salies_kodas" name="salies_kodas" value="" class="text ui-widget-content ui-corner-all">		
+				<input type="hidden" id="saugoti" name="saugoti" value="saugoti">
+			    <!--  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">	
+			  </fieldset>
+		</form>	
+	</div>
+	-->	
+	<table>
+		<tr th:each="tiekejas : ${tiekejai}">  
+			<!--  <td th:text="${tiekejas.getTiekejas()}"></td> -->
+			<td th:text="${tiekejas.getPav()}"></td>
+			<td><span th:each="preke : ${tiekejas.getPreke()}" th:text="|${preke.getPavadinimas()}, |"></span></td>			
+			<!-- <td><input type="button" class="edit" th:attr="data-el_id=${salis.getId()}" value="redaguoti"></td> -->		
+		</tr>
+	</table>	
+</body>
+</html>

@@ -1,0 +1,38 @@
+nav
+{
+	display: block;
+	width: 930px;
+	margin: 0 auto 0;
+	background-color: white;
+	text-align: center;
+	-webkit-border-bottom-right-radius: 12px;
+	-webkit-border-bottom-left-radius: 12px;
+	-moz-border-radius-bottomright: 12px;
+	-moz-border-radius-bottomleft: 12px;
+	border-bottom-right-radius: 12px;
+	border-bottom-left-radius: 12px;
+	opacity: 0.8;
+}
+nav a
+{
+	display: inline-block;
+	width: 100px;
+	padding: 12px;
+	margin: -40px 12px 12px 12px;
+	border: 1px solid grey;
+	background-color: lightgrey;
+	text-decoration: none;
+	color: grey;
+	text-align: center;
+	-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);	
+	-webkit-border-radius: 11px;
+	-moz-border-radius: 11px;
+	border-radius: 11px;
+	opacity: 1 ! important;
+}
+nav a:hover
+{
+	color: white;
+}

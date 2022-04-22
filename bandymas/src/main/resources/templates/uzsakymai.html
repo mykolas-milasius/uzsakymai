@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tiekėjai</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<style>
+		#link { text-decoration: none; }
+		table, tr, td { border: 1px solid black; }
+	    label, input { display:block; }
+	    input.text { margin-bottom:12px; width:95%; padding: .4em; }
+	    fieldset { padding:0; border:0; margin-top:25px; }
+	    h1 { font-size: 1.2em; margin: .6em 0; }
+	    div#users-contain { width: 350px; margin: 20px 0; }
+	    div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+	    div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+	    .ui-dialog .ui-state-error { padding: .3em; }
+	    .validateTips { border: 1px solid transparent; padding: 0.3em; }
+	  </style>	
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+	   $(document).ready(function()
+		{
+		    $( "#link" ).button().on( "click", function()
+		   	{
+		    	location.href = "uzsakymas1";
+	        });
+	    });
+    </script>
+    <link rel="stylesheet" href="main.css">	
+</head>
+<body>
+	<h3>Užsakymai</h3>
+	<div id="page">
+		<nav>
+			<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+		</nav>
+	</div>
+	<table>
+		<tr>
+			<td>Numeris</td>
+			<td>Data</td>
+			<td>Pirkėjas</td>
+			<td>Pristatymo adresas</td>
+			<td>Telefono numeris</td>
+			<td>Prekių kiekis</td>
+			<td>Bendra kaina</td>
+			<td>Užsakymo būsena</td>
+			<td>Daugiau informacijos</td>
+		</tr>
+		<tr th:each="uzsakymas : ${uzsakymai}">  
+			<td th:text="${uzsakymas.getId()}"></td>
+			<td th:text="${uzsakymas.getUzsakymo_laikas()}"></td>
+			<td th:text="${uzsakymas.getPirkejas()}"></td>
+			<td th:text="${uzsakymas.getAdresas()}"></td>
+			<td th:text="${uzsakymas.getTelefono_numeris()}"></td>
+			<td th:text="${uzsakymas.bendrasUzsakymoPrekiuKiekis()}"></td>
+			<td th:text="${uzsakymas.bendraUzsakymoPrekiuKaina()}"></td>
+			<td th:text="${uzsakymas.getUzsakymo_busena()}"></td>
+			<td><button><a id ="link" th:href=@{uzsakymas1(i=${uzsakymas.getId()})}>Užsakymas</a></button></td>
+		</tr>
+	</table>	
+</body>
+</html>

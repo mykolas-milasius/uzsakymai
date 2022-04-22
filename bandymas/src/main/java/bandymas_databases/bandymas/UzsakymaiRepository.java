@@ -1,0 +1,8 @@
+package bandymas_databases.bandymas;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface UzsakymaiRepository extends CrudRepository <Uzsakymai, Integer>
+{
+
+}

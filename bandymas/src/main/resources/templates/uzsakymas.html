@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Užsakymas</title>
+	<meta charset="utf-8">
+	<style>
+		table { border-collapse: collapse; }
+		th, td
+		{
+			border: 1px solid black;
+			padding: 8px;
+		}
+		#link
+		{
+			 text-decoration: none;
+		}
+		button
+		{
+			margin: 0 auto;
+   			display: block;
+		}
+	</style>
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+	<script>
+		$(document).ready(function()
+	    {
+			//Pridėjimas
+		    var dialog_prideti, form_prideti;
+   			
+               dialog_prideti = $( "#div_sukurti" ).dialog(
+               {
+                   autoOpen: false,
+                   height: 300,
+                   width: 300,
+                   modal: true,
+                   buttons:
+                   {
+                       "Patvirtinti": pridetiPreke,
+                       Cancel: function()
+                       {
+                       	dialog_prideti.dialog( "close" ); 
+                       }
+                   }
+               });
+   			
+               $( "#button_prideti" ).button().on( "click", function()
+               {
+               	dialog_prideti.dialog( "open" );
+               });
+               
+               form_prideti = dialog_prideti.find( "form" );
+               
+   		    function pridetiPreke()
+   		    {
+   		        $("#sukurimo_forma").submit();
+   		    }
+		    //Šalinimas
+		    var dialog_salinti;
+		    
+		    dialog_salinti = $( "#salinti_preke" ).dialog(
+	        {
+	            autoOpen: false,
+	            height: 300,
+	            width: 300,
+	            modal: true,
+	            buttons:
+	            {
+	                "Pašalinti": function()
+	                {
+	                	dialog_salinti.dialog( "close" );
+						$( '#salinimo_forma' ).submit();
+	                },
+	                Cancel: function()
+	                {
+	                	dialog_salinti.dialog( "close" ); 
+	                }
+	            }
+	        });
+		    
+		    $('.delete').button().on('click', function() // +
+			{
+		    	id_uzsakymo_prekes = $( this ).data ( 'el_id' );
+	    		$('#i').val(id_uzsakymo_prekes);
+				dialog_salinti.dialog("open");
+			})
+		});
+	</script>
+</head>
+
+<body>
+	<h3>Užsakymas</h3>
+	<div id="page">
+		<nav>
+			<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+		</nav>
+	</div>
+	<div id="div_sukurti">
+	    <form method="post" action="" id="sukurimo_forma">
+	    	<p>Pasirinkite prekę</p>
+			<select name="uzsakymai_prekes_id" id="prekes_id">
+				<option th:each="preke: ${lst_prekes}" th:value="${preke.getId()}" th:text="${preke.getPavadinimas()}"></option>
+			</select>
+			<label for="prekiu_kiekis">Kiekis</label><br>		
+			<input type="text" id="prekiu_kiekis" name="prekiu_kiekis" value="">
+			<input type="hidden" id="id" name="id" value="0">
+	        <input type="hidden" name="prideti_name" value="prideti">
+		 </form>
+	</div>
+	<div id="salinti_preke">
+         <form method="post" action="/salinti-preke-uzsakyme" id="salinimo_forma">
+         	 <h3>Ar tikrai norite ištrinti pasirinktą prekę?</h3>
+             <input type="hidden" name="i" id="i" value="0">
+             <input type="hidden" name="uzsakymo_id" id="uzsakymo_id" th:value="${uzsakymas.getId()}">
+             <input type="hidden" name="salinti" value="salinti">
+         </form>
+    </div>
+	<table>
+	   <tr>
+	    <th>Data</th>
+	    <th>Pirkėjas</th>
+	    <th>Adresas</th>
+	    <th>Telefono numeris</th>
+	    <th>Prekės</th>
+	   </tr>
+			<td th:text="${uzsakymas.getUzsakymo_laikas()}"></td>
+			<td th:text="${uzsakymas.getPirkejas()}"></td>
+			<td th:text="${uzsakymas.getAdresas()}"></td>
+			<td th:text="${uzsakymas.getTelefono_numeris()}"></td>
+			<td><span th:each="preke : ${uzsakymas.getUzsakymai_prekes()}" th:text="|${preke.getPreke().getPavadinimas()} ${preke.getPreke().getKaina()},|"></span></td>
+		</tr>
+	</table>
+	<div>
+		<table>
+			<tr>
+				<th>Prekės pavadinimas</th>
+				<th>Prekės kaina</th>
+				<th>Prekės kiekis</th>
+				<th>Ištrinti prekę</th>
+			</tr>
+		 	<tr th:each="preke: ${uzsakymas.getUzsakymai_prekes()}"> <!-- preke preke_uzsakymas -->
+		 		<td th:text="${preke.getPreke().getPavadinimas()}"></td>
+		 		<td th:text="${preke.getPreke().getKaina()}"></td>
+		 		<td th:text="${preke.getKiekis()}"></td>
+		 		<td><input type="button" class="delete" th:attr="data-el_id=${preke.getId()}" value="Pašalinti"></td>
+		 	</tr>
+		</table>
+	</div>
+	<button id="button_prideti">Pridėti prekę</button>
+</body>
+</html>
