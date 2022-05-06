@@ -4,11 +4,25 @@
 	<title>Užsakymas</title>
 	<meta charset="utf-8">
 	<style>
-		table { border-collapse: collapse; }
-		th, td
+		body
 		{
-			border: 1px solid black;
-			padding: 8px;
+			background: rgb(143,73,172);
+			background: linear-gradient(90deg, rgba(143,73,172,1) 0%, rgba(163,0,20,0.5830707282913166) 60%);
+		}
+		table
+		{
+			border: 3px solid black;
+			text-align:center;
+			margin-left:auto; 
+		    margin-right:auto;
+		}
+		th, tr, td
+		{
+			border: 2px solid red;
+		}
+		.centras
+		{
+			text-align: center
 		}
 		#link
 		{
@@ -92,7 +106,9 @@
 </head>
 
 <body>
-	<h3>Užsakymas</h3>
+	<div class="centras">
+		<h3>Užsakymas</h3>
+	</div>
 	<div id="page">
 		<nav>
 			<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
@@ -149,6 +165,8 @@
 		 	</tr>
 		</table>
 	</div>
-	<button id="button_prideti">Pridėti prekę</button>
+	<div class="centras">
+		<button id="button_prideti">Pridėti prekę</button>
+	</div>
 </body>
 </html>

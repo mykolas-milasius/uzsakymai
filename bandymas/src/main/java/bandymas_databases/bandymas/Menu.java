@@ -10,7 +10,9 @@ public enum Menu
 {
 	Prekes("/prekes")
 	, Užsakymai("/uzsakymai")
-	, Tiekejai("/tiekejai");
+	, Tiekejai("/tiekejai")
+	, Ataskaita("/ataskaita")
+	, Atsijungti("/logout");
 	
 	private final String itemurl;
 	

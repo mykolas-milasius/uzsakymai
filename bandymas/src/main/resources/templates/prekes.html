@@ -4,7 +4,26 @@
 	<title>Prekės</title>
 	<meta charset="utf-8">
 	<style>
-	    table, tr, td { border: 1px solid black; }
+		body
+		{
+			background: rgb(143,73,172);
+			background: linear-gradient(90deg, rgba(143,73,172,1) 0%, rgba(163,0,20,0.5830707282913166) 60%);
+		}
+		table
+		{
+			border: 3px solid black;
+			text-align:center;
+			margin-left:auto; 
+		    margin-right:auto;
+		}
+		tr, td
+		{
+			border: 2px solid red;
+		}
+		.centras
+		{
+			text-align: center
+		}
 	    label, input { display:block; }
 	    input.text { margin-bottom:12px; width:95%; padding: .4em; }
 	    fieldset { padding:0; border:0; margin-top:25px; }
@@ -116,7 +135,9 @@
   	</script>
 </head>
 <body>
-	<h3>Prekės</h3>
+	<div class="centras">
+		<h3>Prekės</h3>
+	</div>
 	<div id="page">
 		<nav>
 			<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
@@ -145,7 +166,9 @@
              <input type="hidden" name="salinti" value="salinti">
          </form>
     </div>
-	<button id="button_sukurti" style="height:50px; width:100px">Sukurti</button>
+    <div class="centras">
+    	<button id="button_sukurti" style="height:50px; width:100px">Sukurti</button>
+    </div>
 	<table>
 		<tr>
 			<td>Prekės pavadinimas</td>

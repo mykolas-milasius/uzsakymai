@@ -48,9 +48,16 @@ public class Uzsakymai
 	{
 		int kiekis = 0;
 		
-		for (int i = 0; i < uzsakymai_prekes.size(); i++)
+		if(uzsakymai_prekes == null)
 		{
-			kiekis += uzsakymai_prekes.get(i).getKiekis();
+			return 0;
+		}
+		else
+		{
+			for (int i = 0; i < uzsakymai_prekes.size(); i++)
+			{
+				kiekis += uzsakymai_prekes.get(i).getKiekis();
+			}
 		}
 		
 		return kiekis;
@@ -60,9 +67,16 @@ public class Uzsakymai
 	{
 		double kaina = 0;
 		
-		for (int i = 0; i < uzsakymai_prekes.size(); i++)
+		if(uzsakymai_prekes == null)
 		{
-			kaina += uzsakymai_prekes.get(i).getPreke().getKaina();
+			return 0;
+		}
+		else
+		{
+			for (int i = 0; i < uzsakymai_prekes.size(); i++)
+			{
+				kaina += uzsakymai_prekes.get(i).getPreke().getKaina();
+			}
 		}
 		
 		return kaina;

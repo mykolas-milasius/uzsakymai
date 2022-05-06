@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Tiekėjai</title>
+	<title>Ataskaita</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<style>
@@ -12,19 +12,21 @@
 		}
 		table
 		{
+			border-collapse: collapse;
 			border: 3px solid black;
 			text-align:center;
 			margin-left:auto; 
 		    margin-right:auto;
 		}
-		tr, td
+		th, tr, td
 		{
 			border: 2px solid red;
 		}
 		.centras
 		{
-			text-align: center
+			text-align: center;
 		}
+		#link { text-decoration: none; }
 	    label, input { display:block; }
 	    input.text { margin-bottom:12px; width:95%; padding: .4em; }
 	    fieldset { padding:0; border:0; margin-top:25px; }
@@ -34,44 +36,20 @@
 	    div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
 	    .ui-dialog .ui-state-error { padding: .3em; }
 	    .validateTips { border: 1px solid transparent; padding: 0.3em; }
-	  </style>
-	  <link rel="stylesheet" href="main.css">	
+	  </style>	
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="main.css">	
 </head>
 <body>
 	<div class="centras">
-		<h3>Tiekėjai</h3>
+		<h3>Ataskaita</h3>
 	</div>
 	<div id="page">
 		<nav>
 			<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
 		</nav>
-	</div>
-	<!--<input type="button" id="salis" value="Naujas tiekėjas">
-	<div id="dialog-form" title="Tiekėjas">
-  		<p class="validateTips">All form fields are required.</p>	
-		<form id="miesto-forma" method="POST" action="">
-			  <fieldset>
-				<label for="pav">Šalis</label>
-				<input type="text" id="pav" name="pav" value="" class="text ui-widget-content ui-corner-all">
-				<label for="salies_kodas">Šalies kodas</label>		
-				<input type="text" id="salies_kodas" name="salies_kodas" value="" class="text ui-widget-content ui-corner-all">		
-				<input type="hidden" id="saugoti" name="saugoti" value="saugoti">
-			    <!--  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">	
-			  </fieldset>
-		</form>	
-	</div>
-	-->	
-	<table>
-		<tr th:each="tiekejas : ${tiekejai}">  
-			<!--  <td th:text="${tiekejas.getTiekejas()}"></td> -->
-			<td th:text="${tiekejas.getPav()}"></td>
-			<td><span th:each="preke : ${tiekejas.getPreke()}" th:text="|${preke.getPavadinimas()}, |"></span></td>			
-			<!-- <td><input type="button" class="edit" th:attr="data-el_id=${salis.getId()}" value="redaguoti"></td> -->		
-		</tr>
-	</table>	
 </body>
 </html>

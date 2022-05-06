@@ -3,7 +3,7 @@ nav
 	display: block;
 	width: 930px;
 	margin: 0 auto 0;
-	background-color: white;
+	/* background-color: white; */
 	text-align: center;
 	-webkit-border-bottom-right-radius: 12px;
 	-webkit-border-bottom-left-radius: 12px;

@@ -2,6 +2,9 @@ package bandymas_databases.bandymas;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import javax.persistence.EntityManagerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mysql.cj.Session;
+import com.mysql.cj.xdevapi.SessionFactory;
 
 @Controller
 public class PrekeController {
@@ -118,9 +124,36 @@ public class PrekeController {
 	}
 	
 	@RequestMapping(path="/uzsakymai", method={ RequestMethod.GET, RequestMethod.POST })
-	public String uzsakymai(@RequestParam(name="", required=false, defaultValue="") String salinti,
+	public String uzsakymai(
+			//@RequestParam(name="salinti", required=false, defaultValue="") String salinti, // removinti salinti jei ka
+			@RequestParam(name ="id", required=false, defaultValue="") String id_s,
+			@RequestParam(name ="data", required=false, defaultValue="") String data,
+			@RequestParam(name ="pirkejas", required=false, defaultValue="") String pirkejas,
+			@RequestParam(name ="adresas", required=false, defaultValue="") String adresas,
+			@RequestParam(name ="telefono_nr", required=false, defaultValue="") String telefono_nr,
+			@RequestParam(name ="uzsakymo_busena", required=false, defaultValue="") String uzsakymo_busena,
+			@RequestParam(name ="prideti_name", required=false, defaultValue="neprideti") String prideti,
 			Model model)
 	{
+		Uzsakymai uzsakymas = new Uzsakymai();
+		if(prideti.equals("prideti"))
+		{
+			Integer id = Integer.parseInt(id_s);
+			Optional <Uzsakymai> found = uzsakymai_repository.findById(id);
+			
+			if(found.isPresent())
+			{
+				uzsakymas = found.get();
+				uzsakymas.setId(id);
+			}
+			uzsakymas.setPirkejas(pirkejas);
+			uzsakymas.setAdresas(adresas);
+			uzsakymas.setTelefono_numeris(telefono_nr);
+			uzsakymas.setUzsakymo_laikas(data);
+			uzsakymas.setUzsakymo_busena(uzsakymo_busena);
+			uzsakymai_repository.save(uzsakymas);
+		}
+		
 		model.addAttribute("uzsakymai", uzsakymai_repository.findAll());
 		model.addAttribute("lst_menu", Menu.values() );
 		
@@ -144,7 +177,7 @@ public class PrekeController {
 	public String uzsakymas1(@RequestParam(name="i", required=true, defaultValue="0") String id
 			, @RequestParam(name="prideti_name", required=false, defaultValue="neprideti") String prideti
 			, @RequestParam(name="prekiu_kiekis", required=false, defaultValue="0") String prekiu_kiekis
-			, @RequestParam(name="prekes_id", required=false, defaultValue="0") String prekes_id
+			, @RequestParam(name="uzsakymai_prekes_id", required=false, defaultValue="0") String prekes_id
 			, Model model
 			)
 	{
@@ -156,6 +189,7 @@ public class PrekeController {
 		}
 		if(prideti.equals("prideti"))
 		{
+			System.out.println(prekes_id);
 			UzsakymaiPrekes uzsakymai_prekes = new UzsakymaiPrekes(prekes_id, id, prekiu_kiekis);
 			uzsakymai_prekes_repository.save(uzsakymai_prekes); /*preke_repository.save(preke);*/
 			return "redirect:uzsakymas1?i="+id;//uzsakymas2.getUzsakymai_prekes().add(uzsakymai_prekes);
@@ -192,5 +226,77 @@ public class PrekeController {
 		}
 		
 		return "redirect:uzsakymas1?i="+uzsakymo_id;//return "redirect:uzsakymai";
+	}
+	
+	@RequestMapping(path="/uzsakymas_red")	
+	public @ResponseBody Uzsakymai uzsakymasRedagavimas(@RequestParam(name="id", required=true, defaultValue="0") Integer id ) throws IOException
+	{
+		Uzsakymai uzsakymas = new Uzsakymai();
+		
+		if (id > 0)
+		{
+			Optional <Uzsakymai> found = uzsakymai_repository.findById( id );
+		
+			if (found.isPresent())
+			{
+				uzsakymas = found.get();
+				uzsakymas.setId ( id );
+			}
+		}
+		return uzsakymas;
+	}
+	//---------------------------------------------------------------------------------------
+	@Autowired 
+	EntityManagerFactory factory;
+	
+	public SessionFactory sessionFactory()
+	{
+
+        if (factory.unwrap(SessionFactory.class) == null) {
+            throw new NullPointerException("factory is not a hibernate factory");
+        }
+        return factory.unwrap(SessionFactory.class);
+}
+	
+	@RequestMapping("/ataskaita")
+	public String uzsakymaiAtaskaita(@RequestParam(name="i", required=true, defaultValue="0") String id
+			, @RequestParam(name="prekiu_kiekis", required=false, defaultValue="0") String prekiu_kiekis
+			, @RequestParam(name="uzsakymai_prekes_id", required=false, defaultValue="0") String prekes_id
+			, Model model
+			)
+	{
+		/*
+		Session session = this.sessionFactory().openSession();
+		Ataskaita ataskaita = new Ataskaita(session);
+		Uzsakymai uzsakymas2 = new Uzsakymai();
+		
+		Optional <Uzsakymai> uzsakymas2_row = uzsakymai_repository.findById(Integer.parseInt(id));
+		if(uzsakymas2_row.isPresent())
+		{
+			uzsakymas2 = uzsakymas2_row.get();
+		}
+		
+		model.addAttribute("uzsakymas", uzsakymas2);
+		//model.addAttribute("lst_ataskaita", top_patieklai_ataskaita.topPatiekalai(laikotarpis_nuo, laikotarpis_iki) ); 
+		//model.addAttribute("lst_menu", Menu.values() );*/
+		return "ataskaita";
+	}
+	
+	@GetMapping("/login")
+	public String login(Model model)
+	{		
+		return "login";
+	}
+	
+	@GetMapping("/")
+	public String home()
+	{
+		return "home";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(Model model)
+	{
+		return "redirect:login";
 	}
 }

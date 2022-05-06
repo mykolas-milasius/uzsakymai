@@ -1,0 +1,19 @@
+<ul id='menu'>
+	<li>
+		<a href='prekes'>Prekės</a>
+	</li>
+		<li>
+		<a href='tiekejai'>Tiekėjai</a>
+	</li>
+	<li>
+		<a href='uzsakymai'>Užsakymai</a>
+	</li>
+	<li>
+		<a href='ataskaita'>Ataskaita</a>
+	</li>
+	<li>
+		<a th:inline='text' href='/logout' id='logout_link' th:data-token='${_csrf.token}'>
+			Atsijungti ([[${#httpServletRequest.remoteUser}]])
+		</a>
+	</li>
+</ul>

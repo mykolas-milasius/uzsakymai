@@ -5,8 +5,28 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<style>
+		body
+		{
+			background: rgb(143,73,172);
+			background: linear-gradient(90deg, rgba(143,73,172,1) 0%, rgba(163,0,20,0.5830707282913166) 60%);
+		}
+		table
+		{
+			border-collapse: collapse;
+			border: 3px solid black;
+			text-align:center;
+			margin-left:auto; 
+		    margin-right:auto;
+		}
+		th, tr, td
+		{
+			border: 2px solid red;
+		}
+		.centras
+		{
+			text-align: center
+		}
 		#link { text-decoration: none; }
-		table, tr, td { border: 1px solid black; }
 	    label, input { display:block; }
 	    input.text { margin-bottom:12px; width:95%; padding: .4em; }
 	    fieldset { padding:0; border:0; margin-top:25px; }
@@ -28,16 +48,103 @@
 		   	{
 		    	location.href = "uzsakymas1";
 	        });
+		    
+   			var dialog_prideti, form_prideti;
+			//Pridejimas
+            dialog_prideti = $( "#div_sukurti" ).dialog(
+            {
+                autoOpen: false,
+                height: 300,
+                width: 300,
+                modal: true,
+                buttons:
+                {
+                    "Patvirtinti": sukurtiUzsakyma,
+                    Cancel: function()
+                    {
+                    	dialog_prideti.dialog( "close" ); 
+                    }
+                }
+            });
+			
+            $( "#button_sukurti" ).button().on( "click", function()
+            {
+            	dialog_prideti.dialog( "open" );
+            });
+            
+            form_prideti = dialog_prideti.find( "form" );
+            
+		    function sukurtiUzsakyma()
+		    {
+		        $("#sukurimo_forma").submit();
+		    }
+		    //Redagavimas
+		    $( ".edit" ).each ( function()
+   		    {
+   		    	$( this ).button().click ( function()
+   		    	{
+   		    		id_uzsakymo = $( this ).data ( 'el_id' );
+   		    		console.log(id_uzsakymo);
+   					$.ajax(
+   					{
+  						 method: 'POST'
+  				 		 , url: '/uzsakymas_red'
+  				 		 , data:
+  				 		 	{
+  				 		 		id: id_uzsakymo
+   				 		}		
+   					}).done( function( data )
+   						{
+    						if ( data != null )
+    						{
+    							$( '#id').val ( data.id );
+    							$( '#pirkejas' ).val ( data.pirkejas );
+    							$( '#adresas' ).val ( data.adresas );
+    							$( '#telefono_nr' ).val ( data.telefono_nr );
+    							$( '#data' ).val ( data.data );
+    							$( '#uzsakymo_busena' ).val ( data.uzsakymo_busena );
+    							dialog_prideti.dialog( "open" );				
+   							}
+   							console.log ( JSON.stringify ( data ) );
+   				  	});			    		
+   		    	});			    
+   		    });
 	    });
     </script>
     <link rel="stylesheet" href="main.css">	
 </head>
 <body>
-	<h3>Užsakymai</h3>
+	<div class="centras">
+		<h3>Užsakymai</h3>
+	</div>
 	<div id="page">
 		<nav>
 			<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
 		</nav>
+	</div>
+		<div id="div_sukurti">
+	    <form method="post" action="" id="sukurimo_forma">
+			<label for="data">Data</label>
+			<input type="text" id="data" name="data" value="">
+			<label for="pirkejas">Pirkėjas</label>		
+			<input type="text" id="pirkejas" name="pirkejas" value="">
+			<label for="adresas">Adresas</label>		
+			<input type="text" id="adresas" name="adresas" value="">
+			<label for="telefono_nr">Telefono numeris</label>		
+			<input type="text" id="telefono_nr" name="telefono_nr" value="">
+			<label for="uzsakymo_busena">Užsakymo būsena</label>
+			<select name="uzsakymo_busena" id="uzsakymo_busena">
+				<option value="Laukiame mokėjimo">Laukiame mokėjimo</option>
+				<option value="Mokėjimas gautas">Mokėjimas gautas</option>
+				<option value="Grąžinama">Grąžinama</option>
+				<option value="Atšaukta">Atšaukta</option>
+			</select>
+			<input type="hidden" id="id" name="id" value="0">
+	        <input type="hidden" name="prideti_name" value="prideti">
+		 </form>
+	</div>
+	<div class="centras">
+		<button id="button_sukurti" style="height:50px; width:100px">Sukurti</button>
 	</div>
 	<table>
 		<tr>
@@ -60,6 +167,7 @@
 			<td th:text="${uzsakymas.bendrasUzsakymoPrekiuKiekis()}"></td>
 			<td th:text="${uzsakymas.bendraUzsakymoPrekiuKaina()}"></td>
 			<td th:text="${uzsakymas.getUzsakymo_busena()}"></td>
+			<td><input type="button" class="edit" th:attr="data-el_id=${uzsakymas.getId()}" value="Redaguoti"></td>
 			<td><button><a id ="link" th:href=@{uzsakymas1(i=${uzsakymas.getId()})}>Užsakymas</a></button></td>
 		</tr>
 	</table>	
